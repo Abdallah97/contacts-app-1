@@ -1,0 +1,16 @@
+ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+img{
+    cursor: pointer;
+    width: 100px;
+}
+
+.selected{
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color:rgba(166, 233, 190, 0.75);
+}

@@ -79,10 +79,31 @@ section div {
 .address {
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  gap: 10px;
 }
 
 .address:not(:first-child) {
   margin-top: 20px;
+}
+
+.address input,
+.address select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 18px;
+}
+
+.address input:focus,
+.address select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .add {
@@ -92,7 +113,7 @@ section div {
 
 .flex-group {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .flex-group input {
@@ -119,8 +140,22 @@ section div em {
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  justify-content: flex-end;
 }
 
-.buttons * {
-  flex: 1 1 auto;
+/* Form array containers */
+div[formArrayName="phones"],
+div[formArrayName="addresses"] {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.flex-column {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  gap: 10px;
 }

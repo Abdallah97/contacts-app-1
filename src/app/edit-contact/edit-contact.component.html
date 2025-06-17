@@ -2,52 +2,89 @@
   <h1 class="header">
     Edit Contact
   </h1>
-  <form>
+  <form [formGroup]="contactForm" (ngSubmit)="saveContact()">
+    
     <section>
       <nav>Name/Info</nav>
       <div>
-        <input placeholder="First Name" />
-        <input placeholder="Last Name" />
-        <input placeholder="Date of Birth" />
-        <input placeholder="Favorites Ranking" />
+        <con-profile-icon-selector formControlName="icon"></con-profile-icon-selector>
+        <input formControlName="firstName" required placeholder="First Name" [class.error]="firstName.invalid && firstName.touched" />       <em *ngIf="firstName.errors?.['required'] && firstName.touched">
+          First Name is required.
+        </em>
+        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched">
+          First Name must be at least 3 characters long.
+        </em>
+        <input formControlName="lastName" placeholder="Last Name" />
+        <input formControlName="dateOfBirth" type="date"  />
+        <div>
+          <span>Favorite Ranking</span>
+          <input type="range" formControlName="favoritesRanking" min="1" max="5" />
+          <span class="range-value">{{ contactForm.get('favoritesRanking')?.value }}</span>
+        </div>
+        <div>
+          <input type="checkbox" formControlName="personal" />
+       Personal
+        </div>
       </div>
     </section>
     <section>
       <nav>Phone</nav>
-      <div class="flex-column">
-        <div class="flex-group">
-          <input placeholder="Phone" />
-          <img src="/assets/plus-grey-blue.png" class="add" />
+      <div formArrayName="phones" >
+        <div class="flex-column" *ngFor="let phone of contactForm.controls.phones.controls; let i = index" [formGroupName]="i">
+          <div class="flex-group">
+            <input formControlName="phoneNumber" placeholder="Phone" />
+            <img src="/assets/plus-grey-blue.png" class="add"  (click)="addPhone()" />
+          </div>
+          <em *ngIf="phone.controls.phoneNumber.invalid && (phone.controls.phoneNumber.dirty || phone.controls.phoneNumber.touched)">
+           Preferred Phone Number is required.
+          </em>
+          <div class="radio">
+            <span *ngFor="let phoneType of phoneTypes">
+              <input type="radio" [value]="phoneType.value" formControlName="phoneType" />
+              <label>{{ phoneType.label }}</label>
+            </span>
+            <span>
+              <input type="checkbox" formControlName="preferred" />
+              Preferred
+            </span>
+
         </div>
-        <div class="radio">
-          <input type="radio" value="mobile"> Mobile
-          <input type="radio" value="work"> Work
-          <input type="radio" value="other"> Other
-        </div>
+      </div>
+      </div>  
+    </section>    <section>
+      <nav>Addresses</nav>
+      <div formArrayName="addresses">
+        <div class="address" *ngFor="let address of contactForm.controls.addresses.controls; let i = index" [formGroupName]="i">
+          <div class="flex-group">
+            <input formControlName="streetAddress" placeholder="Address" />
+            <img src="/assets/plus-grey-blue.png" class="add" (click)="addAddress()" />
+          </div>
+          <input formControlName="city" placeholder="City" />
+          <input formControlName="state" placeholder="State/Region" />
+          <input formControlName="postalCode" placeholder="Zip/Postal Code" />
+          <select formControlName="addressType">
+            <option *ngFor="let addressType of addressTypes" [value]="addressType.value">
+              {{ addressType.label }}
+            </option>
+          </select>
+          <em *ngIf="contactForm.controls.addresses.controls[i].invalid && (contactForm.controls.addresses.controls[i].dirty || contactForm.controls.addresses.controls[i].touched)">
+            Incomplete Address.
+          </em>        </div>
       </div>
     </section>
     <section>
-      <nav>Address</nav>
-      <div>
-        <div class="address">
-          <div class="flex-group">
-            <input placeholder="Address" />
-            <img src="/assets/plus-grey-blue.png" class="add" />
-          </div>
-          <input placeholder="City" />
-          <input placeholder="State/Region" />
-          <input placeholder="Zip/Postal Code" />
-          <select>
-            <option value="home">Home</option>
-            <option value="work">Work</option>
-            <option value="mobile">Other</option>
-          </select>
-        </div>
-      </div>
-    </section>
-  </form>
-  <div class="buttons">
+    <nav>Notes</nav>
+    <div>
+      <textarea formControlName="notes" placeholder="Notes" rows="5"></textarea>
+      <em *ngIf="notes.errors?.['restrictedWords']">
+        Notes cannot contain the words: {{ notes.errors?.['restrictedWords'] }}.
+      </em>
+    </div>
+  </section>
+     <div class="buttons">
     <button class="secondary">Cancel</button>
-    <button class="primary" (click)="saveContact()">Save</button>
+    <button type="submit" class="primary"  [disabled]="contactForm.invalid">Save</button>
   </div>
+  </form>
+ 
 </div>
